@@ -78,7 +78,7 @@ TypescriptDeclarationPlugin.prototype.apply = function(compiler) {
                         });
                     }
                     ignoreLine = true;
-                } else if(line.indexOf('export') != -1 && line.indexOf('{}' != -1)) {
+                } else if(line.indexOf('export') != -1 && line.indexOf('{}') != -1) {
                     ignoreLine = true;
                 }
 
