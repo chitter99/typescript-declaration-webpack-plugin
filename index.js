@@ -43,7 +43,7 @@ TypescriptDeclarationPlugin.prototype.apply = function(compiler) {
                         line = 'export ' + line;
                     }
                 } else if(line.indexOf('import') == 0) {
-                    if(line.indexOf('as') != -1) {
+                    if(line.indexOf(' as ') != -1) {
                         // Module or UMD Import
                         var matches = _this.regexImportModule.exec(line), importTracked = false;
                         for(var im in imports) {
