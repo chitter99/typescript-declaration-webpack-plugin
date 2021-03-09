@@ -1,3 +1,3 @@
 import TypeScriptDeclarationWebpackPlugin from './plugin';
 
-export { TypeScriptDeclarationWebpackPlugin };
+export = TypeScriptDeclarationWebpackPlugin;
