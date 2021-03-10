@@ -28,36 +28,41 @@ export default class TypescriptDeclarationPlugin {
 
 		for(let name in declarationFiles) {
 			let file = declarationFiles[name].source().split('\n');
+
 			for(let i = 0; i < file.length; i++) {
 				let line = file[i], ignoreLine = false;
 
-				if(line.indexOf('declare') != -1) {
-					if(line.indexOf('export') == -1) {
-						line = 'export ' + line;
-					}
+				if(line.indexOf('declare') != -1 && line.indexOf('export') == -1) {
+					line = 'export ' + line;
 				} else if(line.indexOf('import') == 0) {
 					if(line.indexOf(' as ') != -1) {
 						// Module or UMD Import
 						let matches = this.regexImportModule.exec(line), importTracked = false;
-						for(let im in imports) {
-							if(imports[im].mode == 'module' && imports[im].lib == matches[4] && imports[im].alias == matches[2]) {
-								importTracked = true;
-								break;
-							}
-						}
 
-						if(!importTracked) {
-							imports.push({
-								alias: matches[2],
-								lib: matches[4],
-								mode: 'module'
-							});
+						// Make sure regex found matches
+						// Thanks to @dario-piotrowicz
+						if(matches) {
+							for(let im in imports) {
+								if(imports[im].mode == 'module' && imports[im].lib == matches[4] && imports[im].alias == matches[2]) {
+									importTracked = true;
+									break;
+								}
+							}
+	
+							if(!importTracked) {
+								imports.push({
+									alias: matches[2],
+									lib: matches[4],
+									mode: 'module'
+								});
+							}	
 						}
 					}
 					ignoreLine = true;
 				} else if(line.indexOf('/// ') === 0) {
 					// Directive import
 					let matches = this.regexImportDirective.exec(line), importTracked = false;
+					
 					for(let im in imports) {
 						if(imports[im].mode == 'directive' && imports[im].lib == matches[2]) {
 							importTracked = true;
@@ -71,7 +76,7 @@ export default class TypescriptDeclarationPlugin {
 						});
 					}
 					ignoreLine = true;
-				} else if(line.indexOf('export') != -1 && line.indexOf('{}') != -1) {
+				} else if(line.indexOf('export') == 0 && line.indexOf('{}') != -1) {
 					ignoreLine = true;
 				}
 
