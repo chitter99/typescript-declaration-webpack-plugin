@@ -106,7 +106,8 @@ export default class TypescriptDeclarationPlugin {
 			// Search for declaration files.
 			var declarationFiles = {}, foundDeclaration = false;
 			for(var name in compilation.assets) {
-				if(name.indexOf('.d.ts') != -1) {
+				// Make sure declaration maps are ignored
+				if(name.endsWith('.d.ts')) {
 					declarationFiles[name] = compilation.assets[name];
 					if(this.options.removeMergedDeclarations) {
 						delete compilation.assets[name];
