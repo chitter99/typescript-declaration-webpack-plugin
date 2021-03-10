@@ -2,6 +2,7 @@
 type TypescriptDeclarationPluginOptions = {
 	out: string
 	removeMergedDeclarations: boolean
+	removeComments: boolean
 }
 
 export default class TypescriptDeclarationPlugin {
@@ -12,7 +13,8 @@ export default class TypescriptDeclarationPlugin {
 
 	options: TypescriptDeclarationPluginOptions = {
 		out: 'index.d.ts',
-		removeMergedDeclarations: true
+		removeMergedDeclarations: true,
+		removeComments: true
 	};
 
 	constructor(options?) {
@@ -27,7 +29,7 @@ export default class TypescriptDeclarationPlugin {
 		let declarations = [], imports = [];
 
 		for(let name in declarationFiles) {
-			let file = declarationFiles[name].source().split('\n');
+			let file = declarationFiles[name].source().split('\n'), modeMultilineComment = 0;
 
 			for(let i = 0; i < file.length; i++) {
 				let line = file[i], ignoreLine = false;
@@ -78,6 +80,22 @@ export default class TypescriptDeclarationPlugin {
 					ignoreLine = true;
 				} else if(line.indexOf('export') == 0 && line.indexOf('{}') != -1) {
 					ignoreLine = true;
+				} else if(line.startsWith('//')) {
+					if(this.options.removeComments) {
+						ignoreLine = true;
+					}
+				} else if(line.indexOf('/*') != -1) {
+					if(this.options.removeComments) {
+						if(line.indexOf('*/') == -1) {
+							modeMultilineComment += 1;
+						}
+						ignoreLine = true;
+					}
+				} else if(line.indexOf('*/') != -1) {
+					if(this.options.removeComments) {
+						modeMultilineComment -= 1;
+						ignoreLine = true;
+					}
 				}
 
 				if(!ignoreLine) {
