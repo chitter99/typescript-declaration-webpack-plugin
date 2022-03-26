@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/chitter99/typescript-declaration-webpack-plugin#readme",
   "devDependencies": {
+    "@types/webpack": "^5.28.0",
     "typescript": "^4.2.3"
   }
 }
