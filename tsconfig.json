@@ -4,6 +4,7 @@
         "target": "ES6",
         "module": "commonjs",
         "strict": false,
+        "declaration": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
