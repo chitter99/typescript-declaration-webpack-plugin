@@ -1,3 +1,4 @@
-import TypeScriptDeclarationWebpackPlugin from './plugin';
+import { TypescriptDeclarationPlugin } from './plugin';
 
-export = TypeScriptDeclarationWebpackPlugin;
+export default TypescriptDeclarationPlugin;
+export * from './plugin';

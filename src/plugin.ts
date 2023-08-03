@@ -1,12 +1,12 @@
 import { Compiler, optimize, sources } from 'webpack';
 
-type TypescriptDeclarationPluginOptions = {
+export type TypescriptDeclarationPluginOptions = {
     out: string;
     removeMergedDeclarations: boolean;
     removeComments: boolean;
 };
 
-export default class TypescriptDeclarationPlugin extends optimize.ModuleConcatenationPlugin {
+export class TypescriptDeclarationPlugin extends optimize.ModuleConcatenationPlugin {
     public readonly name = 'TypeScriptDeclarationWebpackPlugin';
 
     private regexImportDirective =
